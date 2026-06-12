@@ -21,7 +21,7 @@ const services = [
   {
     moduleId: "MIX-01",
     title: "Mixing",
-    priceRange: "$15 to $50 / track",
+    priceRange: "$15 / track",
     description:
       "EQ, compression, effects, and balancing. A clean, industry ready mix tuned for release and streaming playback.",
     href: "/contact",
@@ -31,7 +31,7 @@ const services = [
   {
     moduleId: "MST-02",
     title: "Mastering",
-    priceRange: "$10 to $50 / track",
+    priceRange: "$10 / track",
     description:
       "Streaming ready loudness and polish. Final detail and translation across speakers, headphones, and platforms.",
     href: "/contact",
@@ -41,7 +41,7 @@ const services = [
   {
     moduleId: "BND-03",
     title: "Mix + Master Bundle",
-    priceRange: "$20 to $75 / track",
+    priceRange: "$20 / track",
     description:
       "Combined mix and master in one session. Cohesive sound, faster turnaround, and a discounted rate versus booking separately.",
     href: "/contact",
