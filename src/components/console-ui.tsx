@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CheckoutButton } from "@/components/checkout-button";
 import {
   bodyClass,
   borderDefault,
@@ -386,6 +387,7 @@ export function PricingModule({
   description,
   ctaLabel,
   href,
+  product,
   featured = false,
   badge,
 }: {
@@ -394,7 +396,8 @@ export function PricingModule({
   priceRange: string;
   description: string;
   ctaLabel: string;
-  href: string;
+  href?: string;
+  product?: string;
   featured?: boolean;
   badge?: string;
 }) {
@@ -424,13 +427,23 @@ export function PricingModule({
           <p className={`text-sm leading-relaxed ${bodyClass}`}>{description}</p>
         </div>
         <div className="mt-auto pt-2">
-          <PluginControl
-            href={href}
-            variant={featured ? "primary" : "secondary"}
-            moduleId={featured ? "BOOK" : "SELECT"}
-          >
-            {ctaLabel}
-          </PluginControl>
+          {product ? (
+            <CheckoutButton
+              product={product}
+              variant={featured ? "primary" : "secondary"}
+              moduleId="BUY"
+            >
+              {ctaLabel}
+            </CheckoutButton>
+          ) : (
+            <PluginControl
+              href={href ?? "/contact"}
+              variant={featured ? "primary" : "secondary"}
+              moduleId={featured ? "BOOK" : "SELECT"}
+            >
+              {ctaLabel}
+            </PluginControl>
+          )}
         </div>
       </div>
     </article>

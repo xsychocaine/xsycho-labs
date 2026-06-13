@@ -5,8 +5,7 @@ import { PluginButtonShell } from "@/components/console-ui";
 import { transitionSmooth } from "@/lib/design-tokens";
 
 type CheckoutButtonProps = {
-  productName: string;
-  price: number;
+  product: string;
   children: React.ReactNode;
   variant?: "primary" | "secondary";
   moduleId?: string;
@@ -14,8 +13,7 @@ type CheckoutButtonProps = {
 };
 
 export function CheckoutButton({
-  productName,
-  price,
+  product,
   children,
   variant = "primary",
   moduleId,
@@ -24,33 +22,30 @@ export function CheckoutButton({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleCheckout() {
+  async function handleBuy() {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch("/api/checkout", {
+      const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productName, price }),
-        redirect: "manual",
+        body: JSON.stringify({ product }),
       });
 
-      if (response.status === 303) {
-        const location = response.headers.get("Location");
-        if (location) {
-          window.location.href = location;
-          return;
-        }
+      const data = (await res.json()) as { url?: string; error?: string };
+
+      if (data.url) {
+        window.location.href = data.url;
+        return;
       }
 
-      const data = (await response.json().catch(() => null)) as {
-        error?: string;
-      } | null;
-
-      throw new Error(data?.error ?? "Checkout failed. Please try again.");
+      throw new Error(data.error ?? "No checkout URL returned");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Checkout failed.");
+      console.error("Checkout error:", err);
+      setError(
+        err instanceof Error ? err.message : "Checkout failed. Please try again.",
+      );
       setLoading(false);
     }
   }
@@ -59,7 +54,7 @@ export function CheckoutButton({
     <div className={`flex w-full flex-col gap-1.5 ${className}`}>
       <button
         type="button"
-        onClick={handleCheckout}
+        onClick={handleBuy}
         disabled={loading}
         className={`group/control flex w-full flex-col gap-1.5 text-left disabled:cursor-not-allowed disabled:opacity-60 ${transitionSmooth}`}
       >

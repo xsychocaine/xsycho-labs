@@ -24,7 +24,7 @@ const services = [
     priceRange: "$15 / track",
     description:
       "EQ, compression, effects, and balancing. A clean, industry ready mix tuned for release and streaming playback.",
-    href: "/contact",
+    product: "mixing_service",
     featured: false,
     badge: undefined,
   },
@@ -34,7 +34,7 @@ const services = [
     priceRange: "$10 / track",
     description:
       "Streaming ready loudness and polish. Final detail and translation across speakers, headphones, and platforms.",
-    href: "/contact",
+    product: "mastering_service",
     featured: false,
     badge: undefined,
   },
@@ -44,7 +44,7 @@ const services = [
     priceRange: "$20 / track",
     description:
       "Combined mix and master in one session. Cohesive sound, faster turnaround, and a discounted rate versus booking separately.",
-    href: "/contact",
+    product: "mix_master_bundle",
     featured: true,
     badge: "Best Value",
   },
@@ -75,7 +75,7 @@ export default function ServicesPage() {
             <SectionReadout
               label="Session Modules"
               title="Mixing & Mastering"
-              note="Per track pricing. I confirm your quote before the session starts."
+              note="Per track pricing. Pay securely, then submit your files on the next step."
             />
             <div className="grid gap-5 sm:grid-cols-2 lg:gap-6">
               {services.map((service) => (
@@ -85,8 +85,9 @@ export default function ServicesPage() {
                   title={service.title}
                   priceRange={service.priceRange}
                   description={service.description}
-                  ctaLabel="Book Service"
-                  href={service.href}
+                  ctaLabel={"product" in service ? "Buy Now" : "Book Service"}
+                  product={"product" in service ? service.product : undefined}
+                  href={"href" in service ? service.href : undefined}
                   featured={service.featured}
                   badge={service.badge}
                 />
@@ -101,12 +102,12 @@ export default function ServicesPage() {
           <div className={`${rackInner} mx-auto max-w-xl text-center`}>
             <SectionReadout
               label="Next Step"
-              title="Ready to book?"
-              note="Share your project, references, and timeline. I'll respond with a quote and turnaround estimate."
+              title="Need something custom?"
+              note="Vocal processing quotes and complex projects — reach out and I'll confirm scope before we start."
             />
             <div className="mx-auto max-w-xs">
               <PluginControl href="/contact" variant="primary" moduleId="BOOK">
-                Get Started
+                Get in Touch
               </PluginControl>
             </div>
           </div>

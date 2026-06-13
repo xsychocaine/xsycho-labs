@@ -15,6 +15,7 @@ import {
   sectionStack,
   transitionSmooth,
 } from "@/components/console-ui";
+import { CommunityLinks } from "@/components/community-links";
 import { PortfolioSpotlightSectionOverlay } from "@/components/portfolio-wip-overlay";
 import { ScrollCue } from "@/components/scroll-cue";
 import { bodyClass, labelClass, labelDimClass } from "@/lib/design-tokens";
@@ -62,12 +63,6 @@ const projects = [
   { name: "Low Light", type: "Mix" as const },
   { name: "Violet Room", type: "Master" as const },
   { name: "Pressure", type: "Beat" as const },
-] as const;
-
-const communityLinks = [
-  { label: "Instagram", href: "#", moduleId: "IG · OUT", sub: undefined },
-  { label: "Music", href: "#", moduleId: "PLAY · OUT", sub: "Spotify / SoundCloud" },
-  { label: "Discord", href: "#", moduleId: "DISC · OUT", sub: "Community" },
 ] as const;
 
 function MeterBridge({ bars = 12 }: { bars?: number }) {
@@ -189,12 +184,7 @@ function FeaturedProductPanel() {
               </p>
             </div>
             <div className="w-full sm:max-w-[14rem]">
-              <CheckoutButton
-                productName={FEATURED_PRODUCT.name}
-                price={FEATURED_PRODUCT.price}
-                variant="primary"
-                moduleId="BUY"
-              >
+              <CheckoutButton product="vocal_preset" variant="primary" moduleId="BUY">
                 Buy Now
               </CheckoutButton>
             </div>
@@ -479,26 +469,7 @@ export default function Home() {
                 title="Community & Links"
                 note="Follow releases, stream latest work, and join the Discord for updates."
               />
-              <div className="grid gap-4 sm:grid-cols-3">
-                {communityLinks.map((link) => (
-                  <div key={link.label} className="flex flex-col gap-1.5">
-                    <PluginControl
-                      href={link.href}
-                      variant="secondary"
-                      moduleId={link.moduleId}
-                    >
-                      {link.label}
-                    </PluginControl>
-                    {link.sub && (
-                      <p
-                        className={`text-center ${labelDimClass} text-white/25`}
-                      >
-                        {link.sub}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
+              <CommunityLinks />
             </div>
           </RackFrame>
         </PageContainer>

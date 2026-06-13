@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { ChannelStripBackground } from "@/components/channel-strip-background";
 import { Navbar } from "@/components/navbar";
 import "./globals.css";
@@ -31,6 +34,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="relative flex min-h-full flex-col bg-xs-bg font-sans text-white">
+        <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <ChannelStripBackground />
         <Navbar />
         {children}

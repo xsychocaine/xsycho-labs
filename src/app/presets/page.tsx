@@ -234,12 +234,7 @@ function FeaturedCustomPreset() {
               </p>
             </div>
             <div className="w-full sm:max-w-[14rem]">
-              <CheckoutButton
-                productName={CUSTOM_PRESET.name}
-                price={CUSTOM_PRESET.price}
-                variant="primary"
-                moduleId="BUY"
-              >
+              <CheckoutButton product="vocal_preset" variant="primary" moduleId="BUY">
                 Buy Now
               </CheckoutButton>
             </div>
@@ -321,7 +316,7 @@ function PresetTierCard({
   description,
   included,
   price,
-  productName,
+  product,
   previewLabel,
   previewSlots,
   previewVariant,
@@ -333,7 +328,7 @@ function PresetTierCard({
   description: string;
   included: readonly string[];
   price: number;
-  productName: string;
+  product: string;
   previewLabel: string;
   previewSlots: { name: string; level: number }[];
   previewVariant: "stock" | "premium";
@@ -394,8 +389,7 @@ function PresetTierCard({
             </p>
           </div>
           <CheckoutButton
-            productName={productName}
-            price={price}
+            product={product}
             variant={featured ? "primary" : "secondary"}
             moduleId="BUY"
           >
@@ -440,7 +434,7 @@ export default function PresetsPage() {
                 description="The full vocal chain using only stock FL Studio plugins. No extra purchases required. Pro results inside the box you already own."
                 included={flStockIncluded}
                 price={10}
-                productName="Xsycho Vocal Starter Chain, FL Stock Edition"
+                product="vocal_preset_starter_fl"
                 previewLabel="FL Stock Chain"
                 previewSlots={flPreviewSlots}
                 previewVariant="stock"
@@ -452,7 +446,7 @@ export default function PresetsPage() {
                 description="Upgraded chain with premium third party plugins for tighter control, richer tone, and a more polished vocal sound straight off the preset."
                 included={premiumIncluded}
                 price={20}
-                productName="Xsycho Vocal Starter Chain, Premium Edition"
+                product="vocal_preset_starter_premium"
                 previewLabel="Premium Chain"
                 previewSlots={premiumPreviewSlots}
                 previewVariant="premium"

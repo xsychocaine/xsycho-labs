@@ -1,94 +1,93 @@
-import { getSiteUrl, getStripe } from "@/lib/stripe";
-import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
+import { NextResponse } from "next/server";
 
-type CheckoutBody = {
-  productName?: unknown;
-  price?: unknown;
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2026-05-27.dahlia",
+});
+
+/** Server-side catalog — product slug must match checkout button + Stripe metadata */
+const PRODUCTS: Record<
+  string,
+  { name: string; unitAmount: number; cancelPath: string }
+> = {
+  mixing_service: {
+    name: "Mixing",
+    unitAmount: 1500,
+    cancelPath: "/services",
+  },
+  mastering_service: {
+    name: "Mastering",
+    unitAmount: 1000,
+    cancelPath: "/services",
+  },
+  mix_master_bundle: {
+    name: "Mix + Master Bundle",
+    unitAmount: 2000,
+    cancelPath: "/services",
+  },
+  vocal_preset: {
+    name: "Fully Custom Vocal Preset",
+    unitAmount: 2500,
+    cancelPath: "/presets",
+  },
+  vocal_preset_starter_fl: {
+    name: "Xsycho Vocal Starter Chain, FL Stock Edition",
+    unitAmount: 1000,
+    cancelPath: "/presets",
+  },
+  vocal_preset_starter_premium: {
+    name: "Xsycho Vocal Starter Chain, Premium Edition",
+    unitAmount: 2000,
+    cancelPath: "/presets",
+  },
 };
 
-const MIN_USD = 0.5;
-const MAX_USD = 10_000;
-
-function parseCheckoutBody(body: CheckoutBody) {
-  if (typeof body.productName !== "string" || !body.productName.trim()) {
-    return { error: "productName is required" as const };
-  }
-
-  if (typeof body.price !== "number" || !Number.isFinite(body.price)) {
-    return { error: "price must be a number (USD)" as const };
-  }
-
-  if (body.price < MIN_USD || body.price > MAX_USD) {
-    return {
-      error: `price must be between $${MIN_USD} and $${MAX_USD}` as const,
-    };
-  }
-
-  const productName = body.productName.trim().slice(0, 120);
-  const unitAmount = Math.round(body.price * 100);
-
-  if (unitAmount < 50) {
-    return { error: "price is below Stripe minimum ($0.50 USD)" as const };
-  }
-
-  return { productName, unitAmount };
-}
-
-export async function POST(request: NextRequest) {
+export async function POST(req: Request) {
   try {
-    const body = (await request.json()) as CheckoutBody;
-    const parsed = parseCheckoutBody(body);
+    const body = (await req.json()) as { product?: unknown };
+    const product =
+      typeof body.product === "string" ? body.product.trim() : "";
 
-    if ("error" in parsed) {
-      return NextResponse.json({ error: parsed.error }, { status: 400 });
+    if (!product) {
+      return NextResponse.json({ error: "product is required" }, { status: 400 });
     }
 
-    const stripe = getStripe();
-    const siteUrl = getSiteUrl();
+    const catalog = PRODUCTS[product];
+    if (!catalog) {
+      return NextResponse.json({ error: "Unknown product" }, { status: 400 });
+    }
 
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      line_items: [
-        {
-          quantity: 1,
-          price_data: {
-            currency: "usd",
-            unit_amount: parsed.unitAmount,
-            product_data: {
-              name: parsed.productName,
-            },
-          },
-        },
-      ],
-      success_url: `${siteUrl}/presets?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${siteUrl}/presets?checkout=cancel`,
-    });
-
-    if (!session.url) {
+    const baseUrl = process.env.NEXT_PUBLIC_URL?.replace(/\/$/, "");
+    if (!baseUrl) {
       return NextResponse.json(
-        { error: "Failed to create checkout session" },
+        { error: "NEXT_PUBLIC_URL is not configured" },
         { status: 500 },
       );
     }
 
-    return NextResponse.redirect(session.url, 303);
-  } catch (error) {
-    console.error("[checkout]", error);
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment",
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: { name: catalog.name },
+            unit_amount: catalog.unitAmount,
+          },
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        product,
+      },
+      success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}${catalog.cancelPath}`,
+    });
 
-    if (error instanceof SyntaxError) {
-      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
-    }
-
-    if (
-      error instanceof Error &&
-      error.message.includes("is not configured")
-    ) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    return NextResponse.json(
-      { error: "Unable to start checkout" },
-      { status: 500 },
-    );
+    return NextResponse.json({ url: session.url });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Checkout failed";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
