@@ -1,3 +1,4 @@
+import { resend } from "@/lib/email";
 import { recordOrderFromStripeSession } from "@/lib/orders";
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
@@ -40,6 +41,29 @@ export async function POST(req: Request) {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
       await recordOrderFromStripeSession(session.id);
+
+      const email = session.customer_details?.email;
+      if (email) {
+        const baseUrl =
+          process.env.NEXT_PUBLIC_URL?.replace(/\/$/, "") ||
+          "https://xsycholabs.com";
+        const submitUrl = `${baseUrl}/submit-files?session_id=${encodeURIComponent(session.id)}`;
+
+        try {
+          await resend.emails.send({
+            from: "Xsycho Labs <orders@xsycholabs.com>",
+            to: email,
+            subject: "We received your order 🎧",
+            html: `
+    <h2>Thanks for your order</h2>
+    <p>Upload your files here:</p>
+    <a href="${submitUrl}">Upload Files</a>
+  `,
+          });
+        } catch (emailErr) {
+          console.error("[stripe/webhook] order email failed", emailErr);
+        }
+      }
     }
 
     return NextResponse.json({ received: true });

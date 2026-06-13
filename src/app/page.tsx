@@ -157,7 +157,6 @@ function FeaturedProductPanel() {
           <ul className="space-y-2">
             {[
               "Built from your raw vocals, beat, and target sound",
-              "Delivered for your DAW with load-in instructions",
               "Processing choices explained for your setup",
             ].map((item) => (
               <li

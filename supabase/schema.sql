@@ -5,9 +5,13 @@ create table if not exists orders (
   email text not null,
   product text not null,
   stripe_session_id text unique not null,
+  file_urls jsonb not null default '[]'::jsonb,
   files_submitted boolean not null default false,
   created_at timestamptz not null default now()
 );
+
+-- If the table already exists without file_urls, run:
+-- alter table orders add column if not exists file_urls jsonb not null default '[]'::jsonb;
 
 create table if not exists submissions (
   id uuid primary key default gen_random_uuid(),

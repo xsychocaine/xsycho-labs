@@ -27,12 +27,15 @@ export async function POST(req: Request) {
       email?: unknown;
       name?: unknown;
       notes?: unknown;
+      sessionId?: unknown;
       files?: unknown;
     };
 
     const email = typeof body.email === "string" ? body.email.trim() : "";
     const name = typeof body.name === "string" ? body.name.trim() : "";
     const notes = typeof body.notes === "string" ? body.notes : null;
+    const sessionId =
+      typeof body.sessionId === "string" ? body.sessionId.trim() : undefined;
     const files = parseFiles(body.files);
 
     if (!email || !name) {
@@ -49,7 +52,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const result = await saveSubmission({ email, name, notes, files });
+    const result = await saveSubmission({
+      email,
+      name,
+      notes,
+      files,
+      sessionId,
+    });
 
     return NextResponse.json({ ok: true, ...result });
   } catch (err: unknown) {

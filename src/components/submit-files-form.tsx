@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { ModuleHeader, PluginButtonShell, RecessedWell } from "@/components/console-ui";
 import { useUploadThing } from "@/lib/uploadthing";
 import { bodyClass, labelDimClass, transitionSmooth } from "@/lib/design-tokens";
@@ -31,6 +32,8 @@ function FormField({
 }
 
 export function SubmitFilesForm() {
+  const searchParams = useSearchParams();
+  const sessionId = searchParams.get("session_id")?.trim() || "";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [notes, setNotes] = useState("");
@@ -48,6 +51,7 @@ export function SubmitFilesForm() {
             email,
             name,
             notes: notes.trim() || null,
+            sessionId: sessionId || undefined,
             files: uploaded.map((file) => ({
               name: file.name,
               url: file.ufsUrl ?? file.url,
@@ -70,7 +74,9 @@ export function SubmitFilesForm() {
         setStatus(
           data.matched
             ? `Files submitted and matched to your ${data.product?.replace(/_/g, " ") ?? "order"}. We'll follow up by email.`
-            : "Files submitted. We couldn't match an order to that email yet — double-check it matches your checkout email.",
+            : sessionId
+              ? "Files submitted. We couldn't match this checkout session yet — your order may still be processing."
+              : "Files submitted. We couldn't match an order to that email yet — double-check it matches your checkout email.",
         );
         setError(null);
         setFiles([]);
@@ -98,7 +104,10 @@ export function SubmitFilesForm() {
       return;
     }
 
-    await startUpload(files);
+    await startUpload(files, {
+      sessionId: sessionId || undefined,
+      email: email.trim() || undefined,
+    });
   }
 
   return (
@@ -108,6 +117,12 @@ export function SubmitFilesForm() {
         onSubmit={handleSubmit}
         className="flex flex-col gap-5 p-5 sm:p-6 lg:p-8"
       >
+        {sessionId && (
+          <p className="font-mono text-[0.65rem] uppercase tracking-wider text-xs-accent/70">
+            Order linked via checkout session
+          </p>
+        )}
+
         <div className="grid gap-5 sm:grid-cols-2">
           <FormField id="name" label="Name">
             <input
@@ -126,7 +141,11 @@ export function SubmitFilesForm() {
           <FormField
             id="email"
             label="Email"
-            hint="Use the same email from your Stripe checkout so we can match your order."
+            hint={
+              sessionId
+                ? "Your checkout session is linked. Use the same email from Stripe checkout."
+                : "Use the same email from your Stripe checkout so we can match your order."
+            }
           >
             <input
               id="email"

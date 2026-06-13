@@ -11,6 +11,85 @@ export type SubmissionFile = {
   key?: string;
 };
 
+function normalizeFileUrls(value: unknown): SubmissionFile[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.flatMap((item) => {
+    if (!item || typeof item !== "object") return [];
+    const file = item as Record<string, unknown>;
+    const name = typeof file.name === "string" ? file.name : "";
+    const url = typeof file.url === "string" ? file.url : "";
+    const key = typeof file.key === "string" ? file.key : undefined;
+    if (!name || !url) return [];
+    return [{ name, url, key }];
+  });
+}
+
+export async function attachFileToOrder(input: {
+  sessionId?: string;
+  email?: string;
+  file: SubmissionFile;
+}) {
+  const sessionId = input.sessionId?.trim();
+  const email = input.email?.trim().toLowerCase();
+
+  if (!sessionId && !email) {
+    console.warn("[orders] attachFileToOrder: missing sessionId and email");
+    return null;
+  }
+
+  const supabase = createAdminClient();
+  const fileEntry = {
+    name: input.file.name,
+    url: input.file.url,
+    key: input.file.key ?? null,
+  };
+
+  let order: { id: string; file_urls: unknown } | null = null;
+
+  if (sessionId) {
+    const { data, error } = await supabase
+      .from("orders")
+      .select("id, file_urls")
+      .eq("stripe_session_id", sessionId)
+      .maybeSingle();
+
+    if (error) throw new Error(error.message);
+    order = data;
+  } else if (email) {
+    const { data, error } = await supabase
+      .from("orders")
+      .select("id, file_urls")
+      .eq("email", email)
+      .eq("files_submitted", false)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) throw new Error(error.message);
+    order = data;
+  }
+
+  if (!order) {
+    console.warn("[orders] attachFileToOrder: no matching order", {
+      sessionId,
+      email,
+    });
+    return null;
+  }
+
+  const fileUrls = [...normalizeFileUrls(order.file_urls), fileEntry];
+
+  const { error: updateError } = await supabase
+    .from("orders")
+    .update({ file_urls: fileUrls, files_submitted: true })
+    .eq("id", order.id);
+
+  if (updateError) throw new Error(updateError.message);
+
+  return order.id;
+}
+
 export async function recordOrderFromStripeSession(sessionId: string) {
   const session = await stripe.checkout.sessions.retrieve(sessionId);
 
@@ -57,18 +136,38 @@ export async function saveSubmission(input: {
   name: string;
   notes?: string | null;
   files: SubmissionFile[];
+  sessionId?: string;
 }) {
   const normalizedEmail = input.email.trim().toLowerCase();
+  const sessionId = input.sessionId?.trim();
   const supabase = createAdminClient();
 
-  const { data: order } = await supabase
-    .from("orders")
-    .select("id, product")
-    .eq("email", normalizedEmail)
-    .eq("files_submitted", false)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  let order: { id: string; product: string } | null = null;
+
+  if (sessionId) {
+    const { data, error } = await supabase
+      .from("orders")
+      .select("id, product")
+      .eq("stripe_session_id", sessionId)
+      .maybeSingle();
+
+    if (error) throw new Error(error.message);
+    order = data;
+  }
+
+  if (!order) {
+    const { data, error } = await supabase
+      .from("orders")
+      .select("id, product")
+      .eq("email", normalizedEmail)
+      .eq("files_submitted", false)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) throw new Error(error.message);
+    order = data;
+  }
 
   const { data: submission, error: submissionError } = await supabase
     .from("submissions")
@@ -89,7 +188,14 @@ export async function saveSubmission(input: {
   if (order?.id) {
     await supabase
       .from("orders")
-      .update({ files_submitted: true })
+      .update({
+        files_submitted: true,
+        file_urls: input.files.map((file) => ({
+          name: file.name,
+          url: file.url,
+          key: file.key ?? null,
+        })),
+      })
       .eq("id", order.id);
   }
 

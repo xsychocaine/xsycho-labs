@@ -39,18 +39,11 @@ const CUSTOM_PRESET = {
     "Custom vocal chain matched to your voice and genre",
     "EQ, compression, de-essing, and space dialed for your track",
     "Processing choices explained for your setup",
-    "Delivered for your DAW with load-in instructions",
   ],
   whoItsFor: [
     "Independent artists recording at home or in the studio",
     "Engineers who want a repeatable vocal starting point",
     "Producers building consistent vocal tone across projects",
-  ],
-  compatibility: [
-    { daw: "FL Studio", status: "Supported" },
-    { daw: "Logic Pro", status: "Supported" },
-    { daw: "Ableton Live", status: "Supported" },
-    { daw: "Pro Tools", status: "On Request" },
   ],
 } as const;
 
@@ -199,28 +192,6 @@ function FeaturedCustomPreset() {
             <div className="mt-3">
               <BulletList items={CUSTOM_PRESET.whoItsFor} />
             </div>
-          </div>
-
-          <div>
-            <p className={labelDimClass}>Compatibility</p>
-            <RecessedWell className="mt-3 space-y-2 p-4">
-              {CUSTOM_PRESET.compatibility.map((row) => (
-                <div
-                  key={row.daw}
-                  className="flex items-center justify-between rounded-[2px] border border-white/[0.05] bg-xs-inset px-3 py-2"
-                >
-                  <span className="font-mono text-[0.6rem] uppercase tracking-wider text-white/45">
-                    {row.daw}
-                  </span>
-                  <span className="font-mono text-[0.55rem] uppercase tracking-widest text-xs-accent/70">
-                    {row.status}
-                  </span>
-                </div>
-              ))}
-              <p className="pt-1 text-center font-mono text-[0.55rem] uppercase tracking-[0.12em] text-white/25">
-                More DAWs available on request
-              </p>
-            </RecessedWell>
           </div>
 
           <div className="flex flex-col gap-4 border-t border-white/[0.06] pt-6 sm:flex-row sm:items-end sm:justify-between">

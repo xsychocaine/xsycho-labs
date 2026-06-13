@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { RecessedWell } from "@/components/console-ui";
 import { SitePage } from "@/components/site-page";
 import { SubmitFilesForm } from "@/components/submit-files-form";
@@ -24,7 +25,9 @@ export default function SubmitFilesPage() {
           project files. WAV or ZIP uploads work best.
         </p>
 
-        <SubmitFilesForm />
+        <Suspense fallback={null}>
+          <SubmitFilesForm />
+        </Suspense>
 
         <RecessedWell className="p-6 sm:p-8">
           <p className={`${labelDimClass} text-xs-accent-bright/70`}>
