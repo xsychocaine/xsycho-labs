@@ -1,4 +1,5 @@
 import { resend } from "@/lib/email";
+import { supabase } from "@/lib/supabase";
 import { recordOrderFromStripeSession } from "@/lib/orders";
 import Stripe from "stripe";
 import { NextResponse } from "next/server";

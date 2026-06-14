@@ -91,6 +91,7 @@ export async function attachFileToOrder(input: {
 }
 
 export async function recordOrderFromStripeSession(sessionId: string) {
+  console.log("[orders] processing session", sessionId);
   const session = await stripe.checkout.sessions.retrieve(sessionId);
 
   if (session.payment_status !== "paid") {
@@ -103,6 +104,11 @@ export async function recordOrderFromStripeSession(sessionId: string) {
     "";
 
   const product = session.metadata?.product?.trim() || "unknown";
+  console.log("[orders] session retrieved", {
+    payment_status: session.payment_status,
+    email,
+    product,
+  });
 
   if (!email) {
     throw new Error("No customer email on checkout session");
@@ -110,6 +116,7 @@ export async function recordOrderFromStripeSession(sessionId: string) {
 
   const supabase = createAdminClient();
 
+  console.log("[orders] attempting supabase upsert");
   const { data, error } = await supabase
     .from("orders")
     .upsert(
@@ -123,6 +130,8 @@ export async function recordOrderFromStripeSession(sessionId: string) {
     )
     .select("id, email, product")
     .single();
+    
+  console.log("[orders] upsert result", { data, error });
 
   if (error) {
     throw new Error(error.message);

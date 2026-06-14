@@ -11,12 +11,9 @@ export function SuccessActions() {
     : "/submit-files";
 
   return (
-    <div className="flex flex-col gap-3 border-t border-white/[0.06] pt-6 sm:flex-row sm:flex-wrap">
+    <div className="border-t border-white/[0.06] pt-6">
       <PluginControl href={submitHref} moduleId="IN · FILES">
         Upload Your Files
-      </PluginControl>
-      <PluginControl href="/" variant="secondary" moduleId="HOME">
-        Back to Home
       </PluginControl>
     </div>
   );
