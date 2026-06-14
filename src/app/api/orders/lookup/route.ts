@@ -1,4 +1,13 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import {
+  formatProduct,
+  getProductConfig,
+  getProductType,
+  productRequiresIntake,
+  resolveProductDownloadUrl,
+  resolveProductId,
+} from "@/lib/products";
+import type { ProductType } from "@/lib/product-types";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -15,7 +24,7 @@ export async function GET(req: Request) {
     const supabase = createAdminClient();
     const { data, error } = await supabase
       .from("orders")
-      .select("email, product, stripe_session_id")
+      .select("email, product, product_type, stripe_session_id")
       .eq("stripe_session_id", sessionId)
       .maybeSingle();
 
@@ -25,9 +34,19 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
+    const productId = resolveProductId(data.product);
+    const productType =
+      (data.product_type as ProductType | null) ?? getProductType(productId);
+    const config = getProductConfig(productId);
+    const baseUrl = process.env.NEXT_PUBLIC_URL?.replace(/\/$/, "") ?? "";
+
     return NextResponse.json({
       email: data.email,
-      product: data.product,
+      product: productId,
+      productName: formatProduct(productId),
+      productType,
+      requiresIntake: config?.requiresIntake ?? productRequiresIntake(productId),
+      downloadUrl: resolveProductDownloadUrl(productId, baseUrl),
       sessionId: data.stripe_session_id,
     });
   } catch (err: unknown) {

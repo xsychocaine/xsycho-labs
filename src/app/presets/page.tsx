@@ -14,6 +14,11 @@ import {
   rackInner,
 } from "@/components/console-ui";
 import { bodyClass, labelClass, labelDimClass, sectionStack } from "@/lib/design-tokens";
+import { getDigitalProduct } from "@/lib/digital-products";
+import { getProductConfig } from "@/lib/products";
+
+const VOCAL_CHAIN_LITE = getDigitalProduct("xsycho-vocal-chain-lite")!;
+const VOCAL_CHAIN_PREMIUM = getDigitalProduct("vocal_preset_starter_premium")!;
 
 export const metadata: Metadata = {
   title: "Presets | Xsycho Labs",
@@ -47,12 +52,12 @@ const CUSTOM_PRESET = {
   ],
 } as const;
 
-const flStockIncluded = [
-  "Vocal chain built with stock FL Studio plugins only",
-  "Fruity EQ, Compressor, Maximus, Reverb & more",
-  "No third party plugins required",
-  "FL Studio project file + preset file",
+const liteIncluded = [
+  "Release-ready vocal chain preset",
+  "Built for FL Studio workflows",
+  "Instant download after checkout",
   "Setup guide with input gain staging",
+  "No intake or file upload required",
 ] as const;
 
 const premiumIncluded = [
@@ -63,12 +68,12 @@ const premiumIncluded = [
   "Setup guide + alternative stock plugin fallback notes",
 ] as const;
 
-const flPreviewSlots = [
-  { name: "Fruity EQ", level: 70 },
-  { name: "Fruity Comp", level: 55 },
-  { name: "Maximus", level: 48 },
-  { name: "Fruity Reverb", level: 40 },
-  { name: "Soft Clip", level: 62 },
+const litePreviewSlots = [
+  { name: "EQ Sculpt", level: 68 },
+  { name: "Dynamics", level: 54 },
+  { name: "De-Ess", level: 44 },
+  { name: "Space", level: 38 },
+  { name: "Tone", level: 60 },
 ];
 
 const premiumPreviewSlots = [
@@ -305,6 +310,7 @@ function PresetTierCard({
   previewVariant: "stock" | "premium";
   featured?: boolean;
 }) {
+  const configPrice = getProductConfig(product)?.price ?? price;
   return (
     <article
       className={`group/tier group/module flex h-full flex-col overflow-hidden rounded-[2px] border bg-xs-surface ${glowRest} ${panelHover} ${glowHover} ${
@@ -353,7 +359,7 @@ function PresetTierCard({
           <div>
             <p className={labelDimClass}>License</p>
             <p className="mt-1 font-mono text-2xl font-medium tracking-tight text-xs-accent-bright/90">
-              ${price}
+              ${configPrice}
             </p>
             <p className="mt-1 text-xs text-white/35">
               One-time purchase · Instant delivery
@@ -392,22 +398,22 @@ export default function PresetsPage() {
           <ModuleHeader label="PRESET · VOCAL CHAIN" />
           <div className={rackInner}>
             <SectionReadout
-              label="Xsycho Vocal Starter Chain"
-              title="Entry Editions"
-              note="Low-cost entry points at $10 to $20. Same release ready workflow. Choose stock FL plugins or my premium third party edition."
+              label="Digital Products"
+              title="Instant Presets"
+              note="Low-cost entry points at $10 to $20. Same release-ready workflow — instant download after checkout."
             />
 
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
               <PresetTierCard
-                moduleId="FL-STK"
-                edition="FL Stock · Built-in Plugins"
-                title="Stock FL Edition"
-                description="The full vocal chain using only stock FL Studio plugins. No extra purchases required. Pro results inside the box you already own."
-                included={flStockIncluded}
-                price={10}
-                product="vocal_preset_starter_fl"
-                previewLabel="FL Stock Chain"
-                previewSlots={flPreviewSlots}
+                moduleId="LITE"
+                edition="Instant Download"
+                title={VOCAL_CHAIN_LITE.name}
+                description="A streamlined vocal chain you can load and go. Built for artists who want pro vocal tone without a custom build or intake form."
+                included={liteIncluded}
+                price={VOCAL_CHAIN_LITE.price}
+                product={VOCAL_CHAIN_LITE.id}
+                previewLabel="Vocal Chain Lite"
+                previewSlots={litePreviewSlots}
                 previewVariant="stock"
               />
               <PresetTierCard
@@ -416,8 +422,8 @@ export default function PresetsPage() {
                 title="Premium Plugin Edition"
                 description="Upgraded chain with premium third party plugins for tighter control, richer tone, and a more polished vocal sound straight off the preset."
                 included={premiumIncluded}
-                price={20}
-                product="vocal_preset_starter_premium"
+                price={VOCAL_CHAIN_PREMIUM.price}
+                product={VOCAL_CHAIN_PREMIUM.id}
                 previewLabel="Premium Chain"
                 previewSlots={premiumPreviewSlots}
                 previewVariant="premium"

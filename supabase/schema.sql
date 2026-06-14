@@ -4,11 +4,15 @@ create table if not exists orders (
   id uuid primary key default gen_random_uuid(),
   email text not null,
   product text not null,
+  product_type text,
   stripe_session_id text unique not null,
   file_urls jsonb not null default '[]'::jsonb,
   files_submitted boolean not null default false,
   created_at timestamptz not null default now()
 );
+
+-- If the table already exists without product_type, run:
+-- alter table orders add column if not exists product_type text;
 
 -- If the table already exists without file_urls, run:
 -- alter table orders add column if not exists file_urls jsonb not null default '[]'::jsonb;
@@ -24,6 +28,8 @@ create table if not exists submissions (
   track_key text,
   reference_notes text,
   general_notes text,
+  vocal_style text,
+  plugins_available text,
   files jsonb not null default '[]'::jsonb,
   order_id uuid references orders (id) on delete set null,
   created_at timestamptz not null default now()
@@ -36,6 +42,8 @@ create table if not exists submissions (
 -- alter table submissions add column if not exists track_key text;
 -- alter table submissions add column if not exists reference_notes text;
 -- alter table submissions add column if not exists general_notes text;
+-- alter table submissions add column if not exists vocal_style text;
+-- alter table submissions add column if not exists plugins_available text;
 
 create index if not exists orders_email_idx on orders (lower(email));
 create index if not exists orders_pending_idx on orders (lower(email), files_submitted, created_at desc);

@@ -1,5 +1,7 @@
 import Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getProductType, resolveProductId } from "@/lib/products";
+import type { ProductType } from "@/lib/product-types";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2026-05-27.dahlia",
@@ -102,7 +104,10 @@ export async function recordOrderFromStripeSession(sessionId: string) {
     session.customer_email?.trim() ||
     "";
 
-  const product = session.metadata?.product?.trim() || "unknown";
+  const product = resolveProductId(session.metadata?.product?.trim() || "unknown");
+  const productType: ProductType =
+    (session.metadata?.product_type?.trim() as ProductType | undefined) ||
+    getProductType(product);
 
   if (!email) {
     throw new Error("No customer email on checkout session");
@@ -116,12 +121,13 @@ export async function recordOrderFromStripeSession(sessionId: string) {
       {
         email: email.toLowerCase(),
         product,
+        product_type: productType,
         stripe_session_id: session.id,
         files_submitted: false,
       },
       { onConflict: "stripe_session_id" },
     )
-    .select("id, email, product")
+    .select("id, email, product, product_type")
     .single();
 
   if (error) {
@@ -141,18 +147,21 @@ export async function saveSubmission(input: {
   trackKey?: string | null;
   referenceNotes?: string | null;
   generalNotes?: string | null;
+  vocalStyle?: string | null;
+  pluginsAvailable?: string | null;
   notes?: string | null;
 }) {
   const normalizedEmail = input.email.trim().toLowerCase();
   const sessionId = input.sessionId?.trim();
   const supabase = createAdminClient();
 
-  let order: { id: string; product: string } | null = null;
+  let order: { id: string; product: string; product_type: string | null } | null =
+    null;
 
   if (sessionId) {
     const { data, error } = await supabase
       .from("orders")
-      .select("id, product")
+      .select("id, product, product_type")
       .eq("stripe_session_id", sessionId)
       .maybeSingle();
 
@@ -163,7 +172,7 @@ export async function saveSubmission(input: {
   if (!order) {
     const { data, error } = await supabase
       .from("orders")
-      .select("id, product")
+      .select("id, product, product_type")
       .eq("email", normalizedEmail)
       .eq("files_submitted", false)
       .order("created_at", { ascending: false })
@@ -193,6 +202,8 @@ export async function saveSubmission(input: {
       track_key: input.trackKey?.trim() || null,
       reference_notes: input.referenceNotes?.trim() || null,
       general_notes: generalNotes,
+      vocal_style: input.vocalStyle?.trim() || null,
+      plugins_available: input.pluginsAvailable?.trim() || null,
       files: input.files,
       order_id: order?.id ?? null,
     })
@@ -204,22 +215,26 @@ export async function saveSubmission(input: {
   }
 
   if (order?.id) {
-    await supabase
-      .from("orders")
-      .update({
-        files_submitted: true,
-        file_urls: input.files.map((file) => ({
-          name: file.name,
-          url: file.url,
-          key: file.key ?? null,
-        })),
-      })
-      .eq("id", order.id);
+    const update: {
+      files_submitted: boolean;
+      file_urls?: { name: string; url: string; key: string | null }[];
+    } = { files_submitted: true };
+
+    if (input.files.length > 0) {
+      update.file_urls = input.files.map((file) => ({
+        name: file.name,
+        url: file.url,
+        key: file.key ?? null,
+      }));
+    }
+
+    await supabase.from("orders").update(update).eq("id", order.id);
   }
 
   return {
     submissionId: submission.id,
     matched: Boolean(order?.id),
     product: order?.product ?? null,
+    productType: order?.product_type ?? null,
   };
 }

@@ -1,4 +1,10 @@
+import {
+  getProductType,
+  INTAKE_PROFILE,
+  type ProductType,
+} from "@/lib/product-types";
 import { saveSubmission, type SubmissionFile } from "@/lib/orders";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 function parseFiles(value: unknown): SubmissionFile[] {
@@ -25,6 +31,33 @@ function parseOptionalString(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+async function resolveProductType(input: {
+  sessionId?: string;
+  serviceType?: string | null;
+}): Promise<ProductType> {
+  if (input.sessionId) {
+    const supabase = createAdminClient();
+    const { data } = await supabase
+      .from("orders")
+      .select("product, product_type")
+      .eq("stripe_session_id", input.sessionId)
+      .maybeSingle();
+
+    if (data) {
+      return (
+        (data.product_type as ProductType | null) ??
+        getProductType(data.product)
+      );
+    }
+  }
+
+  if (input.serviceType) {
+    return getProductType(input.serviceType);
+  }
+
+  return "mixing";
+}
+
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as {
@@ -37,6 +70,8 @@ export async function POST(req: Request) {
       trackKey?: unknown;
       referenceNotes?: unknown;
       generalNotes?: unknown;
+      vocalStyle?: unknown;
+      pluginsAvailable?: unknown;
       files?: unknown;
     };
 
@@ -51,6 +86,8 @@ export async function POST(req: Request) {
       parseOptionalString(body.generalNotes) ||
       parseOptionalString(body.notes) ||
       null;
+    const vocalStyle = parseOptionalString(body.vocalStyle) || null;
+    const pluginsAvailable = parseOptionalString(body.pluginsAvailable) || null;
     const files = parseFiles(body.files);
 
     if (!email || !name) {
@@ -60,7 +97,10 @@ export async function POST(req: Request) {
       );
     }
 
-    if (files.length === 0) {
+    const productType = await resolveProductType({ sessionId, serviceType });
+    const profile = INTAKE_PROFILE[productType];
+
+    if (profile?.filesRequired && files.length === 0) {
       return NextResponse.json(
         { error: "At least one uploaded file is required" },
         { status: 400 },
@@ -77,6 +117,8 @@ export async function POST(req: Request) {
       trackKey,
       referenceNotes,
       generalNotes,
+      vocalStyle,
+      pluginsAvailable,
     });
 
     return NextResponse.json({ ok: true, ...result });
