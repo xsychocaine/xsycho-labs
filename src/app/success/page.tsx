@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import {
-  ModuleHeader,
-  RecessedWell,
-} from "@/components/console-ui";
+import { ModuleHeader, RecessedWell } from "@/components/console-ui";
 import { SitePage } from "@/components/site-page";
 import { SuccessActions } from "@/components/success-actions";
 import { SuccessOrderRecord } from "@/components/success-order-record";
@@ -12,13 +9,14 @@ import { bodyClass, labelDimClass } from "@/lib/design-tokens";
 export const metadata: Metadata = {
   title: "Payment Successful | Xsycho Labs",
   description:
-    "Your checkout is complete. Submit your project files so your mix, master, or preset session can begin.",
+    "Your checkout is complete. Complete your session intake so mixing, mastering, or preset work can begin.",
 };
 
-const nextSteps = [
-  "We receive your files and session notes",
-  "Your mix, master, or preset work begins",
-  "You receive your finished deliverables by email",
+const intakeSteps = [
+  "Confirm your name, email, and linked order",
+  "Add BPM, key, and service details",
+  "Share reference tracks and production notes",
+  "Upload stems, vocals, or project files",
 ];
 
 export default function Success() {
@@ -26,7 +24,7 @@ export default function Success() {
     <SitePage
       eyebrow="Checkout Complete"
       title="Payment Successful"
-      description="Your order is confirmed. Upload your stems or project files next so we can start on your track."
+      description="Your order is confirmed. Complete the session intake next — it's the studio handoff that kicks off your project."
       wide
     >
       <div className="flex flex-col gap-10">
@@ -34,13 +32,30 @@ export default function Success() {
           <ModuleHeader label="OUT · CONFIRM" />
           <div className="flex flex-col gap-6 p-5 sm:p-6 lg:p-8">
             <p className={`text-pretty ${bodyClass} sm:text-base`}>
-              Stripe has processed your payment. Continue below to upload your
-              files — your checkout session is linked automatically.
+              Payment processed. Your checkout session will carry over to the
+              intake form so your order, service type, and files stay linked.
             </p>
 
             <Suspense fallback={null}>
               <SuccessOrderRecord />
             </Suspense>
+
+            <div className="rounded-[2px] border border-white/[0.06] bg-xs-inset/40 p-4 sm:p-5">
+              <p className={`${labelDimClass} text-xs-accent-bright/70`}>
+                Next step · Session intake
+              </p>
+              <ul className={`mt-3 flex flex-col gap-2.5 text-sm ${bodyClass}`}>
+                {intakeSteps.map((step) => (
+                  <li key={step} className="flex gap-2.5">
+                    <span
+                      className="mt-2 h-1 w-1 shrink-0 rounded-full bg-xs-accent/80"
+                      aria-hidden
+                    />
+                    {step}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             <Suspense fallback={null}>
               <SuccessActions />
@@ -50,12 +65,16 @@ export default function Success() {
 
         <RecessedWell className="p-6 sm:p-8">
           <p className={`${labelDimClass} text-xs-accent-bright/70`}>
-            What happens next
+            Studio workflow
           </p>
           <ul
             className={`mt-4 flex flex-col gap-3 text-sm leading-relaxed ${bodyClass}`}
           >
-            {nextSteps.map((item) => (
+            {[
+              "Intake received and matched to your order",
+              "Specs reviewed, then processing begins",
+              "Finished deliverables sent by email",
+            ].map((item) => (
               <li key={item} className="flex gap-2.5">
                 <span
                   className="mt-2 h-1 w-1 shrink-0 rounded-full bg-xs-accent/80"
@@ -65,12 +84,6 @@ export default function Success() {
               </li>
             ))}
           </ul>
-          <p
-            className={`mt-6 border-t border-white/[0.06] pt-4 text-sm ${bodyClass}`}
-          >
-            Questions about your order? Reach out via the contact page and
-            include your checkout email.
-          </p>
         </RecessedWell>
       </div>
     </SitePage>

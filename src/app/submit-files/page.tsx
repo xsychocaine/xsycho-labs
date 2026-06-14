@@ -6,24 +6,47 @@ import { SubmitFilesForm } from "@/components/submit-files-form";
 import { bodyClass, labelDimClass } from "@/lib/design-tokens";
 
 export const metadata: Metadata = {
-  title: "Submit Files | Xsycho Labs",
+  title: "Session Intake | Xsycho Labs",
   description:
-    "Submit your project files after checkout so your mix, master, or preset session can begin.",
+    "Complete your post-checkout session intake with project specs, references, and source files.",
 };
+
+const intakeChecklist = [
+  "Client name and email",
+  "Service type, BPM, and key",
+  "Reference track notes",
+  "Production notes and file uploads",
+];
 
 export default function SubmitFilesPage() {
   return (
     <SitePage
-      eyebrow="Post-Checkout"
-      title="Submit Your Files"
-      description="Upload your stems, vocals, or references so we can start on your track."
+      eyebrow="Post-Checkout Intake"
+      title="Session Intake Form"
+      description="Professional intake for your mix, master, or preset session. Complete every section so processing can begin without delays."
       wide
     >
       <div className="flex flex-col gap-10">
-        <p className={`text-pretty ${bodyClass} sm:text-base`}>
-          Complete this form after payment. Include session notes and your
-          project files. WAV or ZIP uploads work best.
-        </p>
+        <RecessedWell className="p-6 sm:p-8">
+          <p className={`${labelDimClass} text-xs-accent-bright/70`}>
+            Intake checklist
+          </p>
+          <ul className={`mt-4 flex flex-col gap-3 text-sm leading-relaxed ${bodyClass}`}>
+            {intakeChecklist.map((item) => (
+              <li key={item} className="flex gap-2.5">
+                <span
+                  className="mt-2 h-1 w-1 shrink-0 rounded-full bg-xs-accent/80"
+                  aria-hidden
+                />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <p className={`mt-6 text-sm ${bodyClass}`}>
+            WAV or ZIP uploads preferred. Include as much session detail as
+            possible — the more context, the faster we can dial in your sound.
+          </p>
+        </RecessedWell>
 
         <Suspense fallback={null}>
           <SubmitFilesForm />
@@ -35,9 +58,9 @@ export default function SubmitFilesPage() {
           </p>
           <ul className={`mt-4 flex flex-col gap-3 text-sm leading-relaxed ${bodyClass}`}>
             {[
-              "We receive your files and session notes",
-              "Your mix, master, or preset work begins",
-              "You receive your finished deliverables by email",
+              "Your intake is logged and matched to your order",
+              "Session specs are reviewed before processing",
+              "Deliverables are sent to your email when complete",
             ].map((item) => (
               <li key={item} className="flex gap-2.5">
                 <span
@@ -48,9 +71,6 @@ export default function SubmitFilesPage() {
               </li>
             ))}
           </ul>
-          <p className={`mt-6 border-t border-white/[0.06] pt-4 text-sm ${bodyClass}`}>
-            Supported: WAV, MP3, AIFF, and ZIP project folders.
-          </p>
         </RecessedWell>
       </div>
     </SitePage>

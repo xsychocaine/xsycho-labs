@@ -21,6 +21,10 @@ function parseFiles(value: unknown): SubmissionFile[] {
   });
 }
 
+function parseOptionalString(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as {
@@ -28,14 +32,25 @@ export async function POST(req: Request) {
       name?: unknown;
       notes?: unknown;
       sessionId?: unknown;
+      serviceType?: unknown;
+      bpm?: unknown;
+      trackKey?: unknown;
+      referenceNotes?: unknown;
+      generalNotes?: unknown;
       files?: unknown;
     };
 
-    const email = typeof body.email === "string" ? body.email.trim() : "";
-    const name = typeof body.name === "string" ? body.name.trim() : "";
-    const notes = typeof body.notes === "string" ? body.notes : null;
-    const sessionId =
-      typeof body.sessionId === "string" ? body.sessionId.trim() : undefined;
+    const email = parseOptionalString(body.email);
+    const name = parseOptionalString(body.name);
+    const sessionId = parseOptionalString(body.sessionId) || undefined;
+    const serviceType = parseOptionalString(body.serviceType) || null;
+    const bpm = parseOptionalString(body.bpm) || null;
+    const trackKey = parseOptionalString(body.trackKey) || null;
+    const referenceNotes = parseOptionalString(body.referenceNotes) || null;
+    const generalNotes =
+      parseOptionalString(body.generalNotes) ||
+      parseOptionalString(body.notes) ||
+      null;
     const files = parseFiles(body.files);
 
     if (!email || !name) {
@@ -55,9 +70,13 @@ export async function POST(req: Request) {
     const result = await saveSubmission({
       email,
       name,
-      notes,
       files,
       sessionId,
+      serviceType,
+      bpm,
+      trackKey,
+      referenceNotes,
+      generalNotes,
     });
 
     return NextResponse.json({ ok: true, ...result });

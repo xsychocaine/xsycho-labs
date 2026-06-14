@@ -91,7 +91,6 @@ export async function attachFileToOrder(input: {
 }
 
 export async function recordOrderFromStripeSession(sessionId: string) {
-  console.log("[orders] processing session", sessionId);
   const session = await stripe.checkout.sessions.retrieve(sessionId);
 
   if (session.payment_status !== "paid") {
@@ -104,11 +103,6 @@ export async function recordOrderFromStripeSession(sessionId: string) {
     "";
 
   const product = session.metadata?.product?.trim() || "unknown";
-  console.log("[orders] session retrieved", {
-    payment_status: session.payment_status,
-    email,
-    product,
-  });
 
   if (!email) {
     throw new Error("No customer email on checkout session");
@@ -116,7 +110,6 @@ export async function recordOrderFromStripeSession(sessionId: string) {
 
   const supabase = createAdminClient();
 
-  console.log("[orders] attempting supabase upsert");
   const { data, error } = await supabase
     .from("orders")
     .upsert(
@@ -130,8 +123,6 @@ export async function recordOrderFromStripeSession(sessionId: string) {
     )
     .select("id, email, product")
     .single();
-    
-  console.log("[orders] upsert result", { data, error });
 
   if (error) {
     throw new Error(error.message);
@@ -143,9 +134,14 @@ export async function recordOrderFromStripeSession(sessionId: string) {
 export async function saveSubmission(input: {
   email: string;
   name: string;
-  notes?: string | null;
   files: SubmissionFile[];
   sessionId?: string;
+  serviceType?: string | null;
+  bpm?: string | null;
+  trackKey?: string | null;
+  referenceNotes?: string | null;
+  generalNotes?: string | null;
+  notes?: string | null;
 }) {
   const normalizedEmail = input.email.trim().toLowerCase();
   const sessionId = input.sessionId?.trim();
@@ -178,12 +174,25 @@ export async function saveSubmission(input: {
     order = data;
   }
 
+  const serviceType =
+    input.serviceType?.trim() ||
+    (order?.product ? order.product : null);
+
+  const generalNotes =
+    input.generalNotes?.trim() || input.notes?.trim() || null;
+
   const { data: submission, error: submissionError } = await supabase
     .from("submissions")
     .insert({
       email: normalizedEmail,
       name: input.name.trim(),
-      notes: input.notes?.trim() || null,
+      notes: generalNotes,
+      session_id: sessionId ?? null,
+      service_type: serviceType,
+      bpm: input.bpm?.trim() || null,
+      track_key: input.trackKey?.trim() || null,
+      reference_notes: input.referenceNotes?.trim() || null,
+      general_notes: generalNotes,
       files: input.files,
       order_id: order?.id ?? null,
     })

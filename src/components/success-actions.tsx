@@ -12,8 +12,8 @@ export function SuccessActions() {
 
   return (
     <div className="border-t border-white/[0.06] pt-6">
-      <PluginControl href={submitHref} moduleId="IN · FILES">
-        Upload Your Files
+      <PluginControl href={submitHref} moduleId="INTAKE">
+        Complete Session Intake
       </PluginControl>
     </div>
   );

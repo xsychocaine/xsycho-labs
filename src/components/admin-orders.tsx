@@ -1,4 +1,5 @@
 import { ModuleHeader, RecessedWell } from "@/components/console-ui";
+import { parseOrderFileUrls, type OrderFileRecord } from "@/lib/order-files";
 import { supabase } from "@/lib/supabase";
 import { bodyClass, labelDimClass } from "@/lib/design-tokens";
 
@@ -12,25 +13,17 @@ type OrderRow = {
   created_at: string;
 };
 
-type OrderFile = {
-  name: string;
-  url: string;
-};
-
-function parseOrderFiles(value: unknown): OrderFile[] {
-  if (!Array.isArray(value)) return [];
-
-  return value.flatMap((item) => {
-    if (!item || typeof item !== "object") return [];
-    const file = item as Record<string, unknown>;
-    const name = typeof file.name === "string" ? file.name : "";
-    const url = typeof file.url === "string" ? file.url : "";
-    if (!url) return [];
-    return [{ name: name || "File", url }];
-  });
+function protectedFileHref(orderId: string, index: number) {
+  return `/admin/files/${orderId}?index=${index}`;
 }
 
-function OrderFileLinks({ files }: { files: OrderFile[] }) {
+function OrderFileLinks({
+  orderId,
+  files,
+}: {
+  orderId: string;
+  files: OrderFileRecord[];
+}) {
   if (files.length === 0) {
     return <span className="text-white/35">Pending</span>;
   }
@@ -41,7 +34,7 @@ function OrderFileLinks({ files }: { files: OrderFile[] }) {
   if (files.length === 1) {
     return (
       <a
-        href={files[0].url}
+        href={protectedFileHref(orderId, 0)}
         target="_blank"
         rel="noopener noreferrer"
         className={linkClass}
@@ -56,7 +49,7 @@ function OrderFileLinks({ files }: { files: OrderFile[] }) {
       {files.map((file, index) => (
         <a
           key={`${file.url}-${index}`}
-          href={file.url}
+          href={protectedFileHref(orderId, index)}
           target="_blank"
           rel="noopener noreferrer"
           className={linkClass}
@@ -98,7 +91,7 @@ export async function AdminOrders() {
               </thead>
               <tbody>
                 {orders.map((order) => {
-                  const files = parseOrderFiles(order.file_urls);
+                  const files = parseOrderFileUrls(order.file_urls);
 
                   return (
                     <tr
@@ -113,7 +106,7 @@ export async function AdminOrders() {
                         {order.stripe_session_id.slice(0, 18)}…
                       </td>
                       <td className="py-3 pr-4">
-                        <OrderFileLinks files={files} />
+                        <OrderFileLinks orderId={order.id} files={files} />
                       </td>
                       <td className="py-3 text-white/45">
                         {new Date(order.created_at).toLocaleString()}
