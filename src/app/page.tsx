@@ -22,7 +22,7 @@ import { bodyClass, labelClass, labelDimClass } from "@/lib/design-tokens";
 
 const FEATURED_PRODUCT = {
   name: "Fully Custom Vocal Preset",
-  price: 25,
+  price: 30,
   moduleId: "CUSTOM · VOCAL",
   description:
     "Not a generic chain. I sculpt this preset around your voice, your beat, and the sound you're going for. EQ, compression, space, and tone are shaped specifically for how you sing or rap, so the chain reacts to your voice instead of a one size fits all template.",

@@ -18,7 +18,7 @@ export function SitePage({
 }: SitePageProps) {
   return (
     <div
-      className={`relative isolate text-white ${sectionStack} pb-16 pt-6 md:pb-24 md:pt-8`}
+      className={`relative isolate text-white ${sectionStack} pb-16 pt-4 md:pb-24 md:pt-6`}
     >
       <PageContainer>
         <div className={`mx-auto ${wide ? "max-w-6xl" : "max-w-3xl"}`}>

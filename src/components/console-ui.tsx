@@ -119,7 +119,7 @@ export function SectionReadout({
   note?: string;
 }) {
   return (
-    <header className={`mb-8 ${dividerClass} pb-6 lg:mb-10`}>
+    <header className={`mb-5 ${dividerClass} pb-4 lg:mb-6`}>
       <p className={labelClass}>{label}</p>
       <h2 className={`mt-2 text-xl font-semibold tracking-tight text-white sm:text-2xl`}>
         {title}
@@ -163,7 +163,7 @@ export function PageHeader({
   className?: string;
 }) {
   return (
-    <header className={`mb-6 sm:mb-8 ${className}`}>
+    <header className={`mb-4 sm:mb-5 ${className}`}>
       <p className={`${labelDimClass} text-xs-accent/60`}>{label}</p>
       <h1 className="mt-1.5 text-2xl font-semibold tracking-tight text-white sm:text-[1.75rem]">
         {title}

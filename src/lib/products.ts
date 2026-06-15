@@ -44,7 +44,7 @@ const SERVICE_PRODUCTS = {
   vocal_preset: {
     id: "vocal_preset",
     name: "Fully Custom Vocal Preset",
-    price: 25,
+    price: 30,
     productType: "custom_preset",
     requiresIntake: true,
     cancelPath: "/presets",

@@ -33,7 +33,7 @@ type PresetTab = "custom" | "premade";
 
 const CUSTOM_PRESET = {
   name: "Fully Custom Vocal Preset",
-  price: 25,
+  price: 30,
   moduleId: "CUSTOM · VOCAL",
   tagline: "Instant industry ready vocal sound",
   description:
@@ -399,7 +399,7 @@ export function PresetsPageContent() {
 
   return (
     <div
-      className={`relative text-white ${sectionStack} gap-8 pb-12 pt-6 md:gap-10 md:pb-16 md:pt-8`}
+      className={`relative text-white ${sectionStack} pb-12 pt-4 md:pb-16 md:pt-6`}
     >
       <PageContainer>
         <PageHeader label="Digital Products" title="Presets" />

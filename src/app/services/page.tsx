@@ -63,13 +63,10 @@ const services = [
 export default function ServicesPage() {
   return (
     <div
-      className={`relative text-white ${sectionStack} pb-16 pt-6 md:pb-24 md:pt-8`}
+      className={`relative text-white ${sectionStack} pb-16 pt-4 md:pb-24 md:pt-6`}
     >
       <PageContainer>
-        <PageHeader label="Signal Chain" title="Services" />
-      </PageContainer>
-
-      <PageContainer>
+        <PageHeader label="Signal Chain" title="Services" className="mb-5" />
         <RackFrame>
           <div className={rackInner}>
             <SectionReadout

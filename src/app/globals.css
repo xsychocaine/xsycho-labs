@@ -37,8 +37,8 @@
   --xs-text-faint: rgba(255, 255, 255, 0.25);
 
   /* Spacing scale */
-  --xs-space-section: 5rem;
-  --xs-space-section-lg: 7rem;
+  --xs-space-section: 2.5rem;
+  --xs-space-section-lg: 3.5rem;
   --xs-space-rack: 1.5rem;
   --xs-space-rack-lg: 2.5rem;
 
