@@ -323,3 +323,49 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ─── Studio audio scrubber ────────────────────────────────────────────── */
+
+.studio-scrubber {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 1px;
+  background: linear-gradient(
+    to right,
+    var(--xs-accent) 0%,
+    var(--xs-accent-bright) var(--progress, 0%),
+    rgba(255, 255, 255, 0.08) var(--progress, 0%),
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  cursor: pointer;
+}
+
+.studio-scrubber::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  border: 1px solid var(--xs-border-control);
+  background: linear-gradient(to bottom, #2a2a32, #121218);
+  box-shadow:
+    0 1px 0 #030303,
+    0 0 8px rgba(168, 85, 247, 0.35);
+}
+
+.studio-scrubber::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  border: 1px solid var(--xs-border-control);
+  background: linear-gradient(to bottom, #2a2a32, #121218);
+  box-shadow:
+    0 1px 0 #030303,
+    0 0 8px rgba(168, 85, 247, 0.35);
+}
+
+.studio-scrubber:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}

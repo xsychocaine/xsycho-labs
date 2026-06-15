@@ -15,7 +15,7 @@ export const DIGITAL_PRODUCTS = {
   "xsycho-vocal-chain-lite": {
     id: "xsycho-vocal-chain-lite",
     name: "Xsycho Vocal Chain Lite",
-    price: 10,
+    price: 15,
     productType: "premade_preset",
     requiresIntake: false,
     downloadUrl:
@@ -25,7 +25,7 @@ export const DIGITAL_PRODUCTS = {
   "xsycho-vocal-chain-pro": {
     id: "xsycho-vocal-chain-pro",
     name: "Xsycho Vocal Chain Pro",
-    price: 20,
+    price: 25,
     productType: "premade_preset",
     requiresIntake: false,
     downloadUrl:

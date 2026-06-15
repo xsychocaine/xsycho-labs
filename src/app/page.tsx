@@ -16,7 +16,6 @@ import {
   transitionSmooth,
 } from "@/components/console-ui";
 import { CommunityLinks } from "@/components/community-links";
-import { PortfolioSpotlightSectionOverlay } from "@/components/portfolio-wip-overlay";
 import { ScrollCue } from "@/components/scroll-cue";
 import { bodyClass, labelClass, labelDimClass } from "@/lib/design-tokens";
 
@@ -433,31 +432,27 @@ export default function Home() {
       {/* 5. Portfolio Preview */}
       <section id="portfolio" className="scroll-mt-24">
         <PageContainer>
-          <RackFrame interactive={false}>
-            <div className={`${rackInner} relative`}>
-              <div className="pointer-events-none select-none opacity-30 blur-[2px]">
-                <SectionReadout
-                  label="Session Files"
-                  title="Portfolio"
-                  note="Selected mixes, masters, and productions from recent client sessions."
-                />
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-                  {projects.map((project, index) => (
-                    <TrackPanel
-                      key={project.name}
-                      {...project}
-                      index={index}
-                    />
-                  ))}
-                </div>
-                <div className="mt-10 border-t border-white/[0.06] pt-8 lg:mt-12">
-                  <ConsoleLink href="/portfolio">
-                    View full portfolio
-                  </ConsoleLink>
-                </div>
+          <RackFrame>
+            <div className={rackInner}>
+              <SectionReadout
+                label="Session Files"
+                title="Portfolio"
+                note="Before/after vocal chains, mix demonstrations, and featured client sessions."
+              />
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+                {projects.map((project, index) => (
+                  <TrackPanel
+                    key={project.name}
+                    {...project}
+                    index={index}
+                  />
+                ))}
               </div>
-
-              <PortfolioSpotlightSectionOverlay />
+              <div className="mt-10 border-t border-white/[0.06] pt-8 lg:mt-12">
+                <ConsoleLink href="/portfolio">
+                  View full portfolio
+                </ConsoleLink>
+              </div>
             </div>
           </RackFrame>
         </PageContainer>

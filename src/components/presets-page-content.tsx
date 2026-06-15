@@ -58,7 +58,7 @@ const CUSTOM_PRESET = {
 } as const;
 
 const liteIncluded = [
-  "Release-ready vocal chain preset",
+  "Strictly stock plugins",
   "Built for FL Studio workflows",
   "You'll need your own tuner plugin",
   "Instant download after checkout",
@@ -66,6 +66,7 @@ const liteIncluded = [
 ] as const;
 
 const proIncluded = [
+  "Release-ready vocal chain preset",
   "My starting-point chain for every song",
   "Meta Tune, FabFilter suite, and Waves suite",
   "Own these plugins before purchasing",
@@ -345,7 +346,7 @@ function PremadeSection() {
         <div className="grid gap-4 sm:grid-cols-2 lg:gap-5">
           <PresetTierCard
             moduleId="LITE"
-            badge="Instant Download · $10"
+            badge={`Instant Download · $${VOCAL_CHAIN_LITE.price}`}
             title={VOCAL_CHAIN_LITE.name}
             description="A streamlined vocal chain you can load and go — pro tone without a custom build."
             included={liteIncluded}
@@ -354,7 +355,7 @@ function PremadeSection() {
           />
           <PresetTierCard
             moduleId="PRO"
-            badge="Instant Download · $20"
+            badge={`Instant Download · $${VOCAL_CHAIN_PRO.price}`}
             title={VOCAL_CHAIN_PRO.name}
             description="The starting point for every song I make — Meta Tune, FabFilter, and Waves. Own those plugins before purchasing."
             included={proIncluded}
