@@ -65,6 +65,16 @@ const projects = [
   { name: "Pressure", type: "Beat" as const },
 ] as const;
 
+const CHAIN_WAVEFORM_HEIGHTS = Array.from({ length: 40 }, (_, i) =>
+  Math.round(20 + Math.abs(Math.sin(i * 0.45)) * 80),
+);
+
+const TRACK_WAVEFORM_HEIGHTS = [0, 1, 2, 3, 4, 5].map((seed) =>
+  Array.from({ length: 36 }, (_, i) =>
+    Math.round(18 + Math.abs(Math.sin(i * 0.5 + seed)) * 82),
+  ),
+);
+
 function MeterBridge({ bars = 12 }: { bars?: number }) {
   return (
     <RecessedWell className="flex h-10 items-end gap-[3px] px-3 py-2.5 transition-shadow duration-300 group-hover/module:shadow-[inset_0_3px_14px_rgba(0,0,0,0.95),inset_0_0_20px_-8px_rgba(168,85,247,0.15)]">
@@ -114,16 +124,13 @@ function ChainPreview({
         ))}
       </div>
       <div className="mt-4 flex h-12 items-end justify-center gap-[2px] border-t border-white/[0.04] pt-3">
-        {Array.from({ length: 40 }).map((_, i) => {
-          const h = 20 + Math.abs(Math.sin(i * 0.45)) * 80;
-          return (
-            <div
-              key={i}
-              className="w-[2px] rounded-[1px] bg-gradient-to-t from-[#1e0a3a] to-xs-accent-bright/70"
-              style={{ height: `${h}%` }}
-            />
-          );
-        })}
+        {CHAIN_WAVEFORM_HEIGHTS.map((h, i) => (
+          <div
+            key={i}
+            className="w-[2px] rounded-[1px] bg-gradient-to-t from-[#1e0a3a] to-xs-accent-bright/70"
+            style={{ height: `${h}%` }}
+          />
+        ))}
       </div>
     </RecessedWell>
   );
@@ -242,16 +249,15 @@ function WaveformDisplay({ seed = 0 }: { seed?: number }) {
     <RecessedWell
       className={`flex h-[4.5rem] items-end justify-center gap-[2px] px-3 py-2.5 ${transitionSmooth} group-hover/track:shadow-[inset_0_3px_14px_rgba(0,0,0,0.95),inset_0_0_24px_-10px_rgba(168,85,247,0.2)]`}
     >
-      {Array.from({ length: 36 }).map((_, i) => {
-        const h = 18 + Math.abs(Math.sin(i * 0.5 + seed)) * 82;
-        return (
+      {(TRACK_WAVEFORM_HEIGHTS[seed] ?? TRACK_WAVEFORM_HEIGHTS[0]).map(
+        (h, i) => (
           <div
             key={i}
             className={`w-[2px] rounded-[1px] bg-gradient-to-t from-[#1e0a3a] to-xs-accent-bright/80 ${transitionSmooth} group-hover/track:from-xs-accent-deep group-hover/track:to-xs-accent-bright`}
             style={{ height: `${h}%` }}
           />
-        );
-      })}
+        ),
+      )}
     </RecessedWell>
   );
 }

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { transitionSmooth } from "@/lib/design-tokens";
 
 const links = [
@@ -44,14 +44,18 @@ function NavSegment({
   );
 }
 
+function useIsClient() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+}
+
 export function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
+  const isClient = useIsClient();
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -59,10 +63,6 @@ export function Navbar() {
       document.body.style.overflow = "";
     };
   }, [open]);
-
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-black/80 bg-xs-nav/95 shadow-[0_4px_24px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md">
@@ -88,7 +88,7 @@ export function Navbar() {
               <NavSegment
                 href={link.href}
                 label={link.label}
-                active={hydrated && isActivePath(pathname, link.href)}
+                active={isClient && isActivePath(pathname, link.href)}
               />
             </li>
           ))}
@@ -139,7 +139,7 @@ export function Navbar() {
               <NavSegment
                 href={link.href}
                 label={link.label}
-                active={hydrated && isActivePath(pathname, link.href)}
+                active={isClient && isActivePath(pathname, link.href)}
                 onClick={() => setOpen(false)}
               />
             </li>

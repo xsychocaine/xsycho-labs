@@ -6,11 +6,11 @@ import {
 import {
   computeAdminStats,
   formatOrderDate,
-  formatProduct,
   formatUsd,
   getOrderStatus,
   type AdminOrder,
 } from "@/lib/admin-stats";
+import { formatProduct } from "@/lib/products";
 import { parseOrderFileUrls, type OrderFileRecord } from "@/lib/order-files";
 import { supabase } from "@/lib/supabase";
 import { bodyClass, labelDimClass } from "@/lib/design-tokens";

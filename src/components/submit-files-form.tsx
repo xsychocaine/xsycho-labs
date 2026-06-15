@@ -108,7 +108,7 @@ export function SubmitFilesForm() {
   const sessionId = searchParams.get("session_id")?.trim() || "";
 
   const [productType, setProductType] = useState<ProductType>("mixing");
-  const [orderLoaded, setOrderLoaded] = useState(false);
+  const [orderLoaded, setOrderLoaded] = useState(!sessionId);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [serviceType, setServiceType] = useState("");
@@ -127,10 +127,7 @@ export function SubmitFilesForm() {
   const profile = INTAKE_PROFILE[productType];
 
   useEffect(() => {
-    if (!sessionId) {
-      setOrderLoaded(true);
-      return;
-    }
+    if (!sessionId) return;
 
     fetch(`/api/orders/lookup?session_id=${encodeURIComponent(sessionId)}`)
       .then(async (res) => {

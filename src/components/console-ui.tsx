@@ -4,7 +4,6 @@ import {
   bodyClass,
   borderDefault,
   borderFeatured,
-  borderModule,
   dividerClass,
   glowEdgeClass,
   glowHover,
@@ -17,10 +16,8 @@ import {
   pageGutter,
   panelHover,
   rackFrameClass,
-  rackInner,
   rackInnerFrameClass,
   recessedClass,
-  sectionStack,
   transitionSmooth,
 } from "@/lib/design-tokens";
 
