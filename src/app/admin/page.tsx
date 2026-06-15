@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { AdminLoginForm } from "@/components/admin-login-form";
-import { AdminOrders } from "@/components/admin-orders";
+import { AdminDashboard } from "@/components/admin-dashboard";
 import { SitePage } from "@/components/site-page";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 
@@ -30,11 +30,11 @@ export default async function AdminPage() {
   return (
     <SitePage
       eyebrow="Internal"
-      title="Orders"
-      description="Recent checkout orders and file submission status."
+      title="Dashboard"
+      description="Order metrics, product breakdown, and submission status."
       wide
     >
-      <AdminOrders />
+      <AdminDashboard />
     </SitePage>
   );
 }

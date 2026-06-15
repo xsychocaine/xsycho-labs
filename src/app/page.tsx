@@ -389,8 +389,8 @@ export default function Home() {
               <p className={`max-w-2xl ${bodyClass} sm:text-base`}>
                 Xsycho Labs is my home base for presets, mixes, and whatever
                 I&apos;m building next. I produce, record, engineer, and write
-                code, and I finished a computer science degree at 17 along the
-                way. Still working toward my own studio, but this is where the
+                code, and I finished an associate&apos;s degree in computer
+                science at 17 along the way. Still working toward my own studio, but this is where the
                 work lives for now.
               </p>
               <div className="mt-6">

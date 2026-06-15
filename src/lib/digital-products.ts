@@ -22,13 +22,14 @@ export const DIGITAL_PRODUCTS = {
       "https://j0njpbenh1.ufs.sh/f/cymtt7mnQqMFpUxRvfsWh5KdU9LaotqVWHcwCIDRM6bxGpiu",
     cancelPath: "/presets",
   },
-  vocal_preset_starter_premium: {
-    id: "vocal_preset_starter_premium",
-    name: "Xsycho Vocal Starter Chain, Premium Edition",
+  "xsycho-vocal-chain-pro": {
+    id: "xsycho-vocal-chain-pro",
+    name: "Xsycho Vocal Chain Pro",
     price: 20,
     productType: "premade_preset",
     requiresIntake: false,
-    downloadUrl: "/downloads/xsycho-vocal-starter-premium.zip",
+    downloadUrl:
+      "https://j0njpbenh1.ufs.sh/f/cymtt7mnQqMFgCBd7kjcrNPCWbRzSiIGwu5LxEl2kOo7np4T",
     cancelPath: "/presets",
   },
 } as const satisfies Record<string, DigitalProductConfig>;
@@ -38,6 +39,7 @@ export type DigitalProductId = keyof typeof DIGITAL_PRODUCTS;
 /** Legacy Stripe metadata slugs mapped to current product ids */
 export const PRODUCT_ID_ALIASES: Record<string, DigitalProductId | string> = {
   vocal_preset_starter_fl: "xsycho-vocal-chain-lite",
+  vocal_preset_starter_premium: "xsycho-vocal-chain-pro",
 };
 
 export function getDigitalProduct(id: string): DigitalProductConfig | null {

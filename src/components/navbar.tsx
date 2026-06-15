@@ -47,6 +47,11 @@ function NavSegment({
 export function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -83,7 +88,7 @@ export function Navbar() {
               <NavSegment
                 href={link.href}
                 label={link.label}
-                active={isActivePath(pathname, link.href)}
+                active={hydrated && isActivePath(pathname, link.href)}
               />
             </li>
           ))}
@@ -134,7 +139,7 @@ export function Navbar() {
               <NavSegment
                 href={link.href}
                 label={link.label}
-                active={isActivePath(pathname, link.href)}
+                active={hydrated && isActivePath(pathname, link.href)}
                 onClick={() => setOpen(false)}
               />
             </li>

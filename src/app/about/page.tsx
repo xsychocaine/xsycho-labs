@@ -20,10 +20,10 @@ export default function AboutPage() {
             tracks, and building the tools that make both easier.
           </p>
           <p className={`text-pretty ${bodyClass} sm:text-base`}>
-            I&apos;m a producer, artist, engineer, and developer. I picked up
-            a computer science degree at 17 somewhere in that mix. Xsycho Labs
-            is where it all lands: presets, mixing, mastering, and whatever
-            I&apos;m working on next.
+            I&apos;m a producer, artist, engineer, and developer. I earned an
+            associate&apos;s degree in computer science at 17 somewhere in that
+            mix. Xsycho Labs is where it all lands: presets, mixing, mastering,
+            and whatever I&apos;m working on next.
           </p>
           <p className={`text-pretty ${bodyClass} sm:text-base`}>
             Still building toward my own studio. For now this site is the shop

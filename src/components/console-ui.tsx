@@ -458,7 +458,7 @@ export function SiteFooter() {
           className={`flex flex-col items-start justify-between gap-4 rounded-[2px] border border-[#1a1a22] bg-xs-rack px-6 py-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] sm:flex-row sm:items-center ${transitionSmooth} hover:border-xs-accent/15 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_0_24px_-14px_rgba(168,85,247,0.12)]`}
         >
           <p className="text-sm text-white/40">
-            © {new Date().getFullYear()} Xsycho Labs
+            © 2026 Xsycho Labs
           </p>
           <p className={`${labelDimClass} text-white/30`}>
             Solo Audio Engineering & Creative Tools
