@@ -49,6 +49,15 @@ const SERVICE_PRODUCTS = {
     requiresIntake: true,
     cancelPath: "/presets",
   },
+  /** Hidden live-mode Stripe test product. Remove before public launch. */
+  stripe_live_test: {
+    id: "stripe_live_test",
+    name: "Stripe Live Mode Test",
+    price: 1,
+    productType: "premade_preset",
+    requiresIntake: false,
+    cancelPath: "/",
+  },
 } as const satisfies Record<string, ProductConfig>;
 
 function toProductConfig(digital: DigitalProductConfig): ProductConfig {
