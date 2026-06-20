@@ -473,7 +473,7 @@ export function StudioAudioDeck({
 
       {error && (
         <p className={`mt-3 border-t border-white/[0.06] pt-3 ${labelClass} text-white/30`}>
-          Demo clip loading soon — add audio to{" "}
+          Demo clip loading soon. Add audio to{" "}
           <span className="text-xs-accent/60">{src}</span>
         </p>
       )}

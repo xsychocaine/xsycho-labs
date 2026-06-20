@@ -447,19 +447,40 @@ export function PricingModule({
   );
 }
 
+const footerLinks = [
+  { href: "/presets", label: "Presets" },
+  { href: "/services", label: "Services" },
+  { href: "/portfolio", label: "Portfolio" },
+  { href: "/contact", label: "Contact" },
+] as const;
+
 export function SiteFooter() {
   return (
     <footer>
       <PageContainer>
         <div
-          className={`flex flex-col items-start justify-between gap-4 rounded-[2px] border border-[#1a1a22] bg-xs-rack px-6 py-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] sm:flex-row sm:items-center ${transitionSmooth} hover:border-xs-accent/15 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_0_24px_-14px_rgba(168,85,247,0.12)]`}
+          className={`flex flex-col gap-5 rounded-[2px] border border-[#1a1a22] bg-xs-rack px-6 py-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] sm:flex-row sm:items-center sm:justify-between ${transitionSmooth} hover:border-xs-accent/15 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_0_24px_-14px_rgba(168,85,247,0.12)]`}
         >
-          <p className="text-sm text-white/40">
-            © 2026 Xsycho Labs
-          </p>
-          <p className={`${labelDimClass} text-white/30`}>
-            Solo Audio Engineering & Creative Tools
-          </p>
+          <div>
+            <p className="text-sm text-white/40">© 2026 Xsycho Labs</p>
+            <p className="mt-1 font-mono text-[0.55rem] uppercase tracking-wider text-white/25">
+              Solo Audio Engineering
+            </p>
+          </div>
+          <nav aria-label="Footer">
+            <ul className="flex flex-wrap gap-x-4 gap-y-2">
+              {footerLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className={`text-sm text-white/40 ${transitionSmooth} hover:text-xs-accent-bright/90`}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       </PageContainer>
     </footer>

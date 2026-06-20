@@ -57,7 +57,7 @@ export const VOCAL_CHAIN_DEMOS: VocalChainDemo[] = [
 export const MIX_MASTER_DEMOS: MixMasterDemo[] = [
   {
     id: "mix-01",
-    title: "Low-End Trap Session",
+    title: "Low End Trap Session",
     genre: "Trap · Underground",
     beforeSrc: "/portfolio/demos/mix-01-before.mp3",
     afterSrc: "/portfolio/demos/mix-01-after.mp3",
@@ -84,7 +84,7 @@ export const TESTIMONIALS: Testimonial[] = [
   {
     id: "t-01",
     quote:
-      "The vocal chain sat perfectly on the first listen. Clear, present, and still gritty — exactly the underground tone I was chasing.",
+      "The vocal chain sat perfectly on the first listen. Clear, present, and still gritty. Exactly the underground tone I was chasing.",
     name: "Independent Artist",
     role: "Rap · Vocal Session",
     service: "Custom Vocal Preset",

@@ -18,9 +18,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Xsycho Labs | Mixing, Mastering & Audio Presets",
+  title: "Xsycho Labs | Custom Vocal Presets & Audio Engineering",
   description:
-    "I offer high-end mixing, mastering, and custom vocal presets. Solo audio engineering for industry ready sound.",
+    "Custom vocal presets, mixing, mastering, and vocal processing for underground artists. Serious engineering today, growing ecosystem tomorrow.",
 };
 
 export default function RootLayout({

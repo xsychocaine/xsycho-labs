@@ -27,7 +27,7 @@ function OrderFileLinks({
   files: OrderFileRecord[];
 }) {
   if (files.length === 0) {
-    return <span className="text-white/35">—</span>;
+    return <span className="text-white/35">N/A</span>;
   }
 
   const linkClass =

@@ -7,11 +7,11 @@ import { transitionSmooth } from "@/lib/design-tokens";
 
 const links = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/services", label: "Services" },
   { href: "/presets", label: "Presets" },
+  { href: "/services", label: "Services" },
   { href: "/portfolio", label: "Portfolio" },
   { href: "/contact", label: "Contact" },
+  { href: "/about", label: "About" },
 ] as const;
 
 function isActivePath(pathname: string, href: string) {
@@ -67,12 +67,12 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-black/80 bg-xs-nav/95 shadow-[0_4px_24px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-md">
       <nav
-        className="xs-page-gutter flex h-16 items-center justify-between gap-6"
+        className="xs-page-gutter flex h-16 items-center justify-between gap-4"
         aria-label="Main navigation"
       >
         <Link
           href="/"
-          className={`group flex flex-col gap-0.5 ${transitionSmooth} hover:drop-shadow-[0_0_14px_rgba(168,85,247,0.3)]`}
+          className={`group flex shrink-0 flex-col gap-0.5 ${transitionSmooth} hover:drop-shadow-[0_0_14px_rgba(168,85,247,0.3)]`}
         >
           <span className="text-sm font-semibold tracking-tight text-white transition-colors duration-300 group-hover:text-xs-accent-bright">
             Xsycho Labs
@@ -82,21 +82,29 @@ export function Navbar() {
           </span>
         </Link>
 
-        <ul className="hidden items-center gap-0.5 md:flex">
-          {links.map((link) => (
-            <li key={link.href}>
-              <NavSegment
-                href={link.href}
-                label={link.label}
-                active={isClient && isActivePath(pathname, link.href)}
-              />
-            </li>
-          ))}
-        </ul>
+        <div className="hidden items-center gap-1 lg:flex">
+          <ul className="flex items-center gap-0.5">
+            {links.map((link) => (
+              <li key={link.href}>
+                <NavSegment
+                  href={link.href}
+                  label={link.label}
+                  active={isClient && isActivePath(pathname, link.href)}
+                />
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/presets"
+            className={`ml-2 inline-flex h-9 items-center rounded-[2px] border border-xs-accent/40 bg-gradient-to-b from-xs-accent/25 to-[#1e0a3a]/50 px-3.5 text-sm font-semibold text-xs-accent-bright ${transitionSmooth} hover:border-xs-accent-bright/50 hover:shadow-[0_0_20px_-8px_rgba(168,85,247,0.5)]`}
+          >
+            Shop Presets
+          </Link>
+        </div>
 
         <button
           type="button"
-          className={`inline-flex h-9 w-9 items-center justify-center rounded-[2px] border border-xs-border-control bg-gradient-to-b from-[#141418] to-[#0a0a0e] text-white/80 shadow-[0_2px_0_#030303,inset_0_1px_0_rgba(255,255,255,0.06)] ${transitionSmooth} hover:-translate-y-px hover:border-xs-accent/30 hover:shadow-[0_3px_0_#030303,0_0_16px_-6px_rgba(168,85,247,0.35)] active:translate-y-0 md:hidden`}
+          className={`inline-flex h-9 w-9 items-center justify-center rounded-[2px] border border-xs-border-control bg-gradient-to-b from-[#141418] to-[#0a0a0e] text-white/80 shadow-[0_2px_0_#030303,inset_0_1px_0_rgba(255,255,255,0.06)] ${transitionSmooth} hover:-translate-y-px hover:border-xs-accent/30 hover:shadow-[0_3px_0_#030303,0_0_16px_-6px_rgba(168,85,247,0.35)] active:translate-y-0 lg:hidden`}
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -129,7 +137,7 @@ export function Navbar() {
 
       <div
         id="mobile-nav"
-        className={`border-t border-black/60 bg-[#08080c] md:hidden ${
+        className={`border-t border-black/60 bg-[#08080c] lg:hidden ${
           open ? "block" : "hidden"
         }`}
       >
@@ -144,6 +152,15 @@ export function Navbar() {
               />
             </li>
           ))}
+          <li className="pt-2">
+            <Link
+              href="/presets"
+              onClick={() => setOpen(false)}
+              className="flex h-11 items-center justify-center rounded-[2px] border border-xs-accent/40 bg-xs-accent/10 text-sm font-semibold text-xs-accent-bright"
+            >
+              Shop Presets
+            </Link>
+          </li>
         </ul>
       </div>
     </header>

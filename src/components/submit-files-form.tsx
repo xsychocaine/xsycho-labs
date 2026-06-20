@@ -191,8 +191,8 @@ export function SubmitFilesForm() {
         data.matched
           ? `Intake received and matched to ${serviceLabel}. We'll follow up by email.`
           : sessionId
-            ? "Intake received. Your order may still be processing — we'll match it shortly."
-            : "Intake received. We couldn't match an order yet — confirm your checkout email.",
+            ? "Intake received. Your order may still be processing. We'll match it shortly."
+            : "Intake received. We couldn't match an order yet. Confirm your checkout email.",
       );
       setError(null);
       if (hadFiles) {
@@ -282,7 +282,7 @@ export function SubmitFilesForm() {
           No intake required
         </p>
         <p className={`mt-3 text-sm ${bodyClass}`}>
-          Premade preset orders are delivered by email — no file upload is
+          Premade preset orders are delivered by email. No file upload is
           needed. Check your inbox for download instructions.
         </p>
       </RecessedWell>
@@ -417,7 +417,7 @@ export function SubmitFilesForm() {
                 <FormField
                   id="vocal-style"
                   label="Vocal Style"
-                  hint="Genre, tone, delivery — e.g. melodic trap, gritty rock."
+                  hint="Genre, tone, delivery. e.g. melodic trap, gritty rock."
                 >
                   <input
                     id="vocal-style"
@@ -456,7 +456,7 @@ export function SubmitFilesForm() {
                   <FormField
                     id="bpm"
                     label="BPM (optional)"
-                    hint="e.g. 140 or 128–132"
+                    hint="e.g. 140 or 128 to 132"
                   >
                     <input
                       id="bpm"

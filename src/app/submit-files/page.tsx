@@ -9,13 +9,13 @@ import { bodyClass, labelDimClass } from "@/lib/design-tokens";
 export const metadata: Metadata = {
   title: "Session Intake | Xsycho Labs",
   description:
-    "Complete your post-checkout intake with project specs, references, and source files.",
+    "Complete your after checkout intake with project specs, references, and source files.",
 };
 
 export default function SubmitFilesPage() {
   return (
     <SitePage
-      eyebrow="Post-Checkout Intake"
+      eyebrow="Post Checkout Intake"
       title="Session Intake Form"
       description="Complete the intake for your order so processing can begin without delays."
       wide

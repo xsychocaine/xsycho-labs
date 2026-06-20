@@ -33,13 +33,18 @@ export default function AboutPage() {
 
         <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
           <div className="w-full sm:flex-1">
-            <PluginControl href="/presets" variant="secondary" moduleId="SHOP">
-              Browse Presets
+            <PluginControl href="/presets" variant="primary" moduleId="SHOP">
+              Shop Presets
             </PluginControl>
           </div>
           <div className="w-full sm:flex-1">
-            <PluginControl href="/contact" variant="primary" moduleId="BOOK">
-              Work With Me
+            <PluginControl href="/services" variant="secondary" moduleId="SERV">
+              Book a Service
+            </PluginControl>
+          </div>
+          <div className="w-full sm:flex-1">
+            <PluginControl href="/contact" variant="secondary" moduleId="BOOK">
+              Contact
             </PluginControl>
           </div>
         </div>

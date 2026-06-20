@@ -156,7 +156,7 @@ export function SuccessPanel() {
                 </PluginControl>
                 <p className={`mt-3 text-xs text-white/40 ${bodyClass}`}>
                   Also sent to your checkout email. Link expires with your
-                  session — save the file locally.
+                  session. Save the file locally.
                 </p>
               </div>
             )}

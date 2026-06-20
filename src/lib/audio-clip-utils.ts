@@ -41,7 +41,7 @@ export function analyzeAudibleBounds(buffer: AudioBuffer): ClipBounds {
     return { start: 0, end: fileDuration };
   }
 
-  let firstAudible = peaks.findIndex((peak) => peak > SILENCE_THRESHOLD);
+  const firstAudible = peaks.findIndex((peak) => peak > SILENCE_THRESHOLD);
   if (firstAudible < 0) {
     return { start: 0, end: Math.min(fileDuration, MIN_CLIP_SECONDS) };
   }

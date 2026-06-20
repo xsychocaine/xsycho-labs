@@ -25,7 +25,7 @@ function emailShell(body: string) {
       ${body}
       <div style="margin-top:32px;padding-top:20px;border-top:1px solid #27272a;">
         <p style="margin:0;font-size:13px;line-height:1.6;color:#71717a;">
-          Xsycho Labs — Mixing, Mastering &amp; Custom Presets<br />
+          Xsycho Labs · Mixing, Mastering &amp; Custom Presets<br />
           Questions? Reply to this email.
         </p>
       </div>
@@ -137,7 +137,7 @@ function buildServiceIntakeEmail(input: {
   const copy = intakeCopy[productType as Exclude<ProductType, "premade_preset">];
 
   return {
-    subject: `Next step: ${productName} intake — Xsycho Labs`,
+    subject: `Next step: ${productName} intake · Xsycho Labs`,
     html: emailShell(`
       <p style="margin:0 0 16px;font-size:16px;line-height:1.7;color:#d4d4d8;">
         Thank you for your order. Your payment for <strong style="color:#ffffff;">${productName}</strong> was successful.

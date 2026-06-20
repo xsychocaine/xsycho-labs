@@ -4,7 +4,7 @@ import { PresetsPageContent } from "@/components/presets-page-content";
 export const metadata: Metadata = {
   title: "Presets | Xsycho Labs",
   description:
-    "Instant-download vocal chains from $15, plus fully custom presets from $30.",
+    "Custom vocal presets from $30 and instant download chains from $15. Primary storefront for underground artists.",
 };
 
 export default function PresetsPage() {

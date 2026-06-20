@@ -78,7 +78,7 @@ export function PortfolioSpotlightPanel({
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-white/50 sm:text-[0.9375rem] sm:leading-7">
               I&apos;m building out my portfolio showcase. Real client work,
-              session breakdowns, and before/after clips. The rack is being
+              session breakdowns, and before and after clips. The rack is being
               wired up now.
             </p>
           </div>

@@ -32,7 +32,7 @@ export const SUCCESS_CONTENT: Record<ProductType, SuccessContent> = {
     title: "Payment Successful",
     headline: "Your preset is on the way",
     description:
-      "Payment successful — your preset is on the way. Your download link was sent to your checkout email and is available below.",
+      "Payment successful. Your preset is on the way. Your download link was sent to your checkout email and is available below.",
     moduleLabel: "OUT · DELIVER",
     steps: [
       "Download your preset using the link below or from your email",
@@ -40,7 +40,7 @@ export const SUCCESS_CONTENT: Record<ProductType, SuccessContent> = {
       "Reach out if you need help getting started",
     ],
     footerNote:
-      "Premade presets are delivered by email — no file upload is required for this order.",
+      "Premade presets are delivered by email. No file upload is required for this order.",
     showIntakeButton: false,
   },
   custom_preset: {
@@ -55,7 +55,7 @@ export const SUCCESS_CONTENT: Record<ProductType, SuccessContent> = {
       "Upload files only if you want us to hear your raw takes",
     ],
     footerNote:
-      "Custom presets are built to order — intake helps us match your tone and workflow.",
+      "Custom presets are built to order. Intake helps us match your tone and workflow.",
     showIntakeButton: true,
     intakeButtonLabel: "Complete Preset Intake",
   },
@@ -86,7 +86,7 @@ export const SUCCESS_CONTENT: Record<ProductType, SuccessContent> = {
       "Add loudness targets or reference notes (optional)",
     ],
     footerNote:
-      "Mastering intake only needs your final mix — stems, BPM, and key are not required.",
+      "Mastering intake only needs your final mix. Stems, BPM, and key are not required.",
     showIntakeButton: true,
     intakeButtonLabel: "Submit Master Intake",
   },
