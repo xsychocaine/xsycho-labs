@@ -136,7 +136,7 @@ function FeaturedCustomPreset() {
               ${CUSTOM_PRESET.price}
             </p>
             <p className="mt-1 text-xs text-white/35">
-              Intake required · Delivered in 3 to 5 days
+              Intake required · 5 days maximum delivery
             </p>
           </div>
           <div className="w-full sm:max-w-[14rem]">

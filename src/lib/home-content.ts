@@ -19,7 +19,7 @@ export const CURRENT_OFFERINGS: CurrentOffering[] = [
     moduleId: "CUS · VOC",
     title: "Custom Vocal Presets",
     description:
-      "A chain built around your voice, beat, and target sound. Delivered in 3 to 5 days.",
+      "A chain built around your voice, beat, and target sound. 5 days maximum delivery.",
     href: "/presets",
     cta: "Get Custom Preset",
     priceHint: "From $30",
@@ -131,7 +131,7 @@ export const FEATURED_CUSTOM_PRESET = {
   moduleId: "CUSTOM · VOCAL",
   bullets: [
     "Built around your voice, beat, and target sound",
-    "Delivered in 3 to 5 days with setup notes",
+    "5 days maximum delivery with setup notes",
     "EQ, compression, space, and tone shaped for how you perform",
   ],
 } as const;
